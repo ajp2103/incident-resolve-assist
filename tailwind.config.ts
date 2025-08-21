@@ -70,6 +70,11 @@ export default {
 					medium: 'hsl(var(--priority-medium))',
 					low: 'hsl(var(--priority-low))'
 				},
+				agent: {
+					primary: 'hsl(var(--agent-primary))',
+					secondary: 'hsl(var(--agent-secondary))',
+					accent: 'hsl(var(--agent-accent))'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -83,12 +88,14 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-agent': 'var(--gradient-agent)',
 				'gradient-card': 'var(--gradient-card)',
 				'gradient-hero': 'var(--gradient-hero)'
 			},
 			boxShadow: {
 				'card': 'var(--shadow-card)',
-				'elevation': 'var(--shadow-elevation)'
+				'elevation': 'var(--shadow-elevation)',
+				'glow': 'var(--shadow-glow)'
 			},
 			transitionTimingFunction: {
 				'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',

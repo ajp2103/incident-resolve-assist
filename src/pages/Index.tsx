@@ -3,7 +3,7 @@ import { Header } from "@/components/layout/Header";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { IncidentsList } from "@/components/incidents/IncidentsList";
 import { RecommendationPanel } from "@/components/recommendations/RecommendationPanel";
-import { ChatInterface } from "@/components/chat/ChatInterface";
+import { EnhancedChatInterface } from "@/components/chat/EnhancedChatInterface";
 import { StatsCards } from "@/components/dashboard/StatsCards";
 
 const Index = () => {
@@ -60,12 +60,12 @@ const Index = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-bold">AI Assistant</h1>
+              <h1 className="text-3xl font-bold">AI Agent Assistant</h1>
               <p className="text-muted-foreground">
-                Get instant help with incident resolution and troubleshooting
+                Enhanced AI with incident analysis, pattern recognition, and automated resolution capabilities
               </p>
             </div>
-            <ChatInterface />
+            <EnhancedChatInterface />
           </div>
         );
       case "knowledge":

@@ -19,7 +19,13 @@ import {
   ThumbsDown,
   MessageSquare,
   ExternalLink,
-  Copy
+  Copy,
+  Play,
+  Pause,
+  RefreshCw,
+  Cog,
+  Zap,
+  Bot
 } from "lucide-react";
 
 interface RecommendationPanelProps {
@@ -88,6 +94,9 @@ const mockRecommendation = {
 export const RecommendationPanel = ({ incident, onClose }: RecommendationPanelProps) => {
   const [feedback, setFeedback] = useState("");
   const [selectedSteps, setSelectedSteps] = useState<number[]>([]);
+  const [executingSteps, setExecutingSteps] = useState<number[]>([]);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [autoMode, setAutoMode] = useState(false);
 
   const toggleStep = (stepId: number) => {
     setSelectedSteps(prev => 
@@ -97,8 +106,36 @@ export const RecommendationPanel = ({ incident, onClose }: RecommendationPanelPr
     );
   };
 
+  const executeStep = async (stepId: number) => {
+    setExecutingSteps(prev => [...prev, stepId]);
+    
+    // Simulate step execution
+    setTimeout(() => {
+      setExecutingSteps(prev => prev.filter(id => id !== stepId));
+      setCompletedSteps(prev => [...prev, stepId]);
+    }, 3000);
+  };
+
+  const executeAllSteps = async () => {
+    setAutoMode(true);
+    for (const step of mockRecommendation.steps) {
+      await new Promise(resolve => {
+        executeStep(step.id);
+        setTimeout(resolve, 3500);
+      });
+    }
+    setAutoMode(false);
+  };
+
   const copyCommand = (command: string) => {
     navigator.clipboard.writeText(command);
+  };
+
+  const getStepStatus = (stepId: number) => {
+    if (completedSteps.includes(stepId)) return "completed";
+    if (executingSteps.includes(stepId)) return "executing";
+    if (selectedSteps.includes(stepId)) return "selected";
+    return "pending";
   };
 
   return (
@@ -122,9 +159,28 @@ export const RecommendationPanel = ({ incident, onClose }: RecommendationPanelPr
                   </Badge>
                 </div>
               </div>
-              <Button onClick={onClose} variant="outline">
-                Close
-              </Button>
+              <div className="flex items-center space-x-2">
+                <Button
+                  onClick={executeAllSteps}
+                  disabled={autoMode}
+                  className="bg-gradient-agent hover:opacity-90"
+                >
+                  {autoMode ? (
+                    <>
+                      <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                      Auto-Executing...
+                    </>
+                  ) : (
+                    <>
+                      <Bot className="mr-2 h-4 w-4" />
+                      Auto-Execute All
+                    </>
+                  )}
+                </Button>
+                <Button onClick={onClose} variant="outline">
+                  Close
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -134,31 +190,50 @@ export const RecommendationPanel = ({ incident, onClose }: RecommendationPanelPr
               <TabsList className="mx-6 mt-4 w-fit">
                 <TabsTrigger value="steps">Resolution Steps</TabsTrigger>
                 <TabsTrigger value="similar">Similar Incidents</TabsTrigger>
+                <TabsTrigger value="agent">Agent Actions</TabsTrigger>
                 <TabsTrigger value="feedback">Feedback</TabsTrigger>
               </TabsList>
 
               <div className="flex-1 overflow-auto p-6">
                 <TabsContent value="steps" className="space-y-4 mt-0">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold">Recommended Resolution Steps</h3>
+                    <Badge variant="outline">
+                      {completedSteps.length}/{mockRecommendation.steps.length} completed
+                    </Badge>
+                  </div>
                   <div className="grid gap-4">
-                    {mockRecommendation.steps.map((step) => (
-                      <Card 
-                        key={step.id} 
-                        className={`cursor-pointer transition-all ${
-                          selectedSteps.includes(step.id) 
-                            ? 'ring-2 ring-accent bg-accent/5' 
-                            : 'hover:shadow-md'
-                        }`}
-                        onClick={() => toggleStep(step.id)}
-                      >
+                    {mockRecommendation.steps.map((step) => {
+                      const status = getStepStatus(step.id);
+                      return (
+                        <Card 
+                          key={step.id} 
+                          className={`cursor-pointer transition-all ${
+                            status === "selected" || status === "completed"
+                              ? 'ring-2 ring-accent bg-accent/5' 
+                              : status === "executing"
+                              ? 'ring-2 ring-primary bg-primary/5'
+                              : 'hover:shadow-md'
+                          }`}
+                          onClick={() => !executingSteps.includes(step.id) && !completedSteps.includes(step.id) && toggleStep(step.id)}
+                        >
                         <CardHeader className="pb-3">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center space-x-3">
                               <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                selectedSteps.includes(step.id)
+                                status === "completed"
+                                  ? 'bg-accent text-accent-foreground'
+                                  : status === "executing"
+                                  ? 'bg-primary text-primary-foreground'
+                                  : status === "selected"
                                   ? 'bg-accent text-accent-foreground'
                                   : 'bg-muted text-muted-foreground'
                               }`}>
-                                {selectedSteps.includes(step.id) ? (
+                                {status === "completed" ? (
+                                  <CheckCircle className="h-4 w-4" />
+                                ) : status === "executing" ? (
+                                  <RefreshCw className="h-4 w-4 animate-spin" />
+                                ) : status === "selected" ? (
                                   <CheckCircle className="h-4 w-4" />
                                 ) : (
                                   <span className="text-sm font-semibold">{step.id}</span>
@@ -169,9 +244,24 @@ export const RecommendationPanel = ({ incident, onClose }: RecommendationPanelPr
                                 <CardDescription>{step.description}</CardDescription>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                              <Clock className="h-4 w-4" />
-                              <span>{step.estimatedTime}</span>
+                            <div className="flex items-center space-x-2">
+                              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                                <Clock className="h-4 w-4" />
+                                <span>{step.estimatedTime}</span>
+                              </div>
+                              {status === "pending" && selectedSteps.includes(step.id) && (
+                                <Button
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    executeStep(step.id);
+                                  }}
+                                  className="bg-gradient-agent hover:opacity-90"
+                                >
+                                  <Play className="h-4 w-4 mr-1" />
+                                  Execute
+                                </Button>
+                              )}
                             </div>
                           </div>
                         </CardHeader>
@@ -191,7 +281,70 @@ export const RecommendationPanel = ({ incident, onClose }: RecommendationPanelPr
                           </div>
                         </CardContent>
                       </Card>
-                    ))}
+                    )})}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="agent" className="space-y-4 mt-0">
+                  <div className="space-y-4">
+                    <Card className="bg-gradient-agent text-white">
+                      <CardHeader>
+                        <CardTitle className="flex items-center space-x-2">
+                          <Bot className="h-5 w-5" />
+                          <span>Autonomous Agent Controls</span>
+                        </CardTitle>
+                        <CardDescription className="text-gray-200">
+                          Configure and monitor automated resolution execution
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Execution Mode</label>
+                            <div className="flex space-x-2">
+                              <Button
+                                variant={autoMode ? "secondary" : "outline"}
+                                size="sm"
+                                onClick={() => setAutoMode(!autoMode)}
+                                className="bg-white/10 border-white/20 hover:bg-white/20"
+                              >
+                                <Zap className="h-4 w-4 mr-1" />
+                                Auto
+                              </Button>
+                              <Button
+                                variant={!autoMode ? "secondary" : "outline"}
+                                size="sm"
+                                onClick={() => setAutoMode(false)}
+                                className="bg-white/10 border-white/20 hover:bg-white/20"
+                              >
+                                <Cog className="h-4 w-4 mr-1" />
+                                Manual
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Safety Checks</label>
+                            <div className="flex items-center space-x-2">
+                              <input type="checkbox" defaultChecked className="rounded" />
+                              <span className="text-sm">Require approval for critical actions</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="pt-4 border-t border-white/20">
+                          <h4 className="text-sm font-medium mb-2">Agent Capabilities</h4>
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div>✓ System diagnostics</div>
+                            <div>✓ Log analysis</div>
+                            <div>✓ Service restarts</div>
+                            <div>✓ Configuration updates</div>
+                            <div>✓ Network testing</div>
+                            <div>✓ Performance monitoring</div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
                 </TabsContent>
 

@@ -6,29 +6,29 @@
 
 @layer base {
   :root {
-    /* Enterprise Professional Theme */
-    --background: 248 250 252;
-    --foreground: 215 25% 15%;
+    /* Enterprise Professional Theme - Modern Purple/Violet */
+    --background: 250 252 254;
+    --foreground: 235 25% 15%;
 
     --card: 255 255 255;
-    --card-foreground: 215 25% 15%;
+    --card-foreground: 235 25% 15%;
 
     --popover: 255 255 255;
-    --popover-foreground: 215 25% 15%;
+    --popover-foreground: 235 25% 15%;
 
-    /* Professional Blue Theme */
-    --primary: 213 94% 38%;
+    /* Modern Purple/Violet Primary Theme */
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 213 100% 45%;
-    --primary-dark: 213 94% 32%;
+    --primary-light: 262 100% 65%;
+    --primary-dark: 262 83% 48%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 215 25% 27%;
+    --secondary: 240 14% 96%;
+    --secondary-foreground: 235 25% 27%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 215 20% 50%;
+    --muted: 240 14% 96%;
+    --muted-foreground: 235 20% 50%;
 
-    --accent: 142 76% 36%;
+    --accent: 142 71% 45%;
     --accent-foreground: 0 0% 100%;
 
     --warning: 38 92% 50%;
@@ -37,90 +37,101 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 213 94% 38%;
+    --border: 240 13% 91%;
+    --input: 240 13% 91%;
+    --ring: 262 83% 58%;
 
     --radius: 0.75rem;
 
     /* Status Colors for Incidents */
-    --status-new: 213 94% 38%;
+    --status-new: 262 83% 58%;
     --status-in-progress: 38 92% 50%;
-    --status-resolved: 142 76% 36%;
-    --status-closed: 215 20% 50%;
+    --status-resolved: 142 71% 45%;
+    --status-closed: 235 20% 50%;
 
     /* Priority Colors */
     --priority-critical: 0 84% 60%;
     --priority-high: 25 95% 53%;
     --priority-medium: 38 92% 50%;
-    --priority-low: 142 76% 36%;
+    --priority-low: 142 71% 45%;
+
+    /* Agent Theme Colors */
+    --agent-primary: 280 100% 70%;
+    --agent-secondary: 265 89% 78%;
+    --agent-accent: 295 100% 85%;
 
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(220 14% 98%));
+    --gradient-agent: linear-gradient(135deg, hsl(var(--agent-primary)), hsl(var(--agent-secondary)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(240 14% 98%));
     --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-dark)) 100%);
 
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 hsl(var(--primary) / 0.05);
     --shadow-card: 0 4px 6px -1px hsl(var(--primary) / 0.1), 0 2px 4px -1px hsl(var(--primary) / 0.06);
     --shadow-elevation: 0 10px 15px -3px hsl(var(--primary) / 0.1), 0 4px 6px -2px hsl(var(--primary) / 0.05);
+    --shadow-glow: 0 0 20px hsl(var(--primary) / 0.3);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 255 255 255;
-    --sidebar-foreground: 215 25% 27%;
-    --sidebar-primary: 213 94% 38%;
+    --sidebar-foreground: 235 25% 27%;
+    --sidebar-primary: 262 83% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 14% 96%;
-    --sidebar-accent-foreground: 215 25% 27%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 213 94% 38%;
+    --sidebar-accent: 240 14% 96%;
+    --sidebar-accent-foreground: 235 25% 27%;
+    --sidebar-border: 240 13% 91%;
+    --sidebar-ring: 262 83% 58%;
   }
 
   .dark {
-    --background: 215 28% 8%;
-    --foreground: 220 14% 96%;
+    --background: 235 28% 8%;
+    --foreground: 240 14% 96%;
 
-    --card: 215 28% 10%;
-    --card-foreground: 220 14% 96%;
+    --card: 235 28% 10%;
+    --card-foreground: 240 14% 96%;
 
-    --popover: 215 28% 10%;
-    --popover-foreground: 220 14% 96%;
+    --popover: 235 28% 10%;
+    --popover-foreground: 240 14% 96%;
 
-    --primary: 213 100% 65%;
-    --primary-foreground: 215 28% 8%;
-    --primary-light: 213 100% 70%;
-    --primary-dark: 213 100% 55%;
+    --primary: 262 100% 75%;
+    --primary-foreground: 235 28% 8%;
+    --primary-light: 262 100% 80%;
+    --primary-dark: 262 100% 65%;
 
-    --secondary: 215 25% 15%;
-    --secondary-foreground: 220 14% 96%;
+    --secondary: 235 25% 15%;
+    --secondary-foreground: 240 14% 96%;
 
-    --muted: 215 25% 15%;
-    --muted-foreground: 215 20% 70%;
+    --muted: 235 25% 15%;
+    --muted-foreground: 235 20% 70%;
 
-    --accent: 142 76% 45%;
-    --accent-foreground: 215 28% 8%;
+    --accent: 142 71% 55%;
+    --accent-foreground: 235 28% 8%;
 
     --warning: 38 92% 60%;
-    --warning-foreground: 215 28% 8%;
+    --warning-foreground: 235 28% 8%;
 
     --destructive: 0 84% 70%;
-    --destructive-foreground: 215 28% 8%;
+    --destructive-foreground: 235 28% 8%;
 
-    --border: 215 25% 20%;
-    --input: 215 25% 20%;
-    --ring: 213 100% 65%;
+    --border: 235 25% 20%;
+    --input: 235 25% 20%;
+    --ring: 262 100% 75%;
 
-    --sidebar-background: 215 28% 10%;
-    --sidebar-foreground: 220 14% 96%;
-    --sidebar-primary: 213 100% 65%;
-    --sidebar-primary-foreground: 215 28% 8%;
-    --sidebar-accent: 215 25% 15%;
-    --sidebar-accent-foreground: 220 14% 96%;
-    --sidebar-border: 215 25% 20%;
-    --sidebar-ring: 213 100% 65%;
+    --agent-primary: 280 100% 80%;
+    --agent-secondary: 265 89% 85%;
+    --agent-accent: 295 100% 90%;
+
+    --sidebar-background: 235 28% 10%;
+    --sidebar-foreground: 240 14% 96%;
+    --sidebar-primary: 262 100% 75%;
+    --sidebar-primary-foreground: 235 28% 8%;
+    --sidebar-accent: 235 25% 15%;
+    --sidebar-accent-foreground: 240 14% 96%;
+    --sidebar-border: 235 25% 20%;
+    --sidebar-ring: 262 100% 75%;
   }
 }
 
